@@ -1,0 +1,2 @@
+(151,94) CIRCLE blue 10
+(45,31) RECTANGLE red (20,10)
