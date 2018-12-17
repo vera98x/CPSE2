@@ -5,6 +5,8 @@
 #include "ball.hpp"
 #include "rectangle.hpp"
 #include "drawable.hpp"
+#include "line.hpp"
+#include "picture.hpp"
 
 
 class unknown_color : public std::exception {
@@ -23,6 +25,9 @@ private:
 };
 
 class end_of_file : public std::exception {
+};
+
+class falseFilename : public std::exception {
 };
 
 class unknown_shape : public std::exception {
@@ -145,10 +150,26 @@ drawable * drawable_read(std::ifstream & input) {
 		return new rectangle(position, color);
 
 	}
-	/*else if (name == "PICTURE") {
-		return new picture(. . .);
 
-	}*/
+	else if (name == "LINE") {
+		sf::Color color;
+		sf::Vector2f size;
+		input >> color >> size;
+		return new line(position, color);
+
+	}
+
+	else if (name == "PICTURE") {
+		sf::Texture t;
+		std::string filename;
+		input >> filename;
+		if (!t.loadFromFile(filename)) {
+			throw falseFilename();
+		}
+		
+		return new picture(position, t, filename);
+
+	}
 	else if (name == "") {
 		throw end_of_file();
 	}
@@ -214,6 +235,20 @@ int main( int argc, char *argv[] ){
 						output << " RECTANGLE ";
 						output << (screen_objects[i]->getColor());
 						output << (screen_objects[i]->getSize());
+					} 
+					else if (dynamic_cast<line*>(screen_objects[i])) {
+						output << " LINE ";
+						output << (screen_objects[i]->getColor());
+						output << (screen_objects[i]->getSize());
+					}
+					else if (dynamic_cast<line*>(screen_objects[i])) {
+						output << " LINE ";
+						output << (screen_objects[i]->getColor());
+						output << (screen_objects[i]->getSize());
+					}
+					else if (dynamic_cast<picture*>(screen_objects[i])) {
+						output << " PICTURE ";
+						output << (screen_objects[i]->getFilename());
 					}
 					else {
 						throw unknown_shape();

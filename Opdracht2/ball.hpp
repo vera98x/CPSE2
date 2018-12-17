@@ -31,6 +31,7 @@ public:
 		speed.x *= delta.x;
 		speed.y *= delta.y;
 	}
+	virtual std::string getFilename() const { return ""; };
 
 private:
 	sf::Vector2f position;

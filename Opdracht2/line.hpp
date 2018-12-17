@@ -1,13 +1,13 @@
-#ifndef _RECTANGLE_HPP
-#define _RECTANGLE_HPP
+#ifndef _LINE_HPP
+#define _LINE_HPP
 
 #include "drawable.hpp"
 
-class rectangle : public drawable{
+class line : public drawable {
 
 public:
 
-	rectangle(sf::Vector2f position, sf::Color c, sf::Vector2f size = sf::Vector2f{ 20.0, 10.0 });
+	line(sf::Vector2f position, sf::Color c, sf::Vector2f size = sf::Vector2f{ 70.0, 2.0 });
 	void move(const sf::Vector2f & delta);
 	void jump(const sf::Vector2f & delta) override;
 	void draw(sf::RenderWindow & window) const override;
@@ -15,7 +15,7 @@ public:
 		return size;
 	}
 	sf::Vector2f getPosition() override;
-	sf::FloatRect getGlobalBounds() const override{
+	sf::FloatRect getGlobalBounds() const override {
 		sf::RectangleShape rectangle;
 		rectangle.setSize(size);
 		rectangle.setPosition(position);
@@ -25,7 +25,6 @@ public:
 	sf::Color getColor() const override {
 		return c;
 	}
-
 	virtual std::string getFilename() const { return ""; };
 
 private:

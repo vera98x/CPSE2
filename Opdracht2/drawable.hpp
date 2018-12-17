@@ -12,6 +12,7 @@ public:
 	virtual sf::Vector2f getPosition() = 0;
 	virtual sf::Color getColor() const = 0;
 	virtual sf::Vector2f getSize() const = 0;
+	virtual std::string getFilename() const = 0;
 };
 
 #endif
