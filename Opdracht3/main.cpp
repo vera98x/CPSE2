@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <array>
 #include <map>
+#include <functional>
 
 
 class end_of_file : public std::exception {
@@ -46,7 +47,12 @@ std::ofstream & operator<<(std::ofstream & input, const std::vector<T> & rhs) {
 	return input;
 }
 
-std::string newMin(std::map<std::string, int> & mostCommon) {
+struct mapTypeMin {
+	std::string minS;
+	int minI;
+};
+
+mapTypeMin newMin(std::map<std::string, int> & mostCommon) {
 
 	std::string minS;
 	int minI = 0;
@@ -62,8 +68,24 @@ std::string newMin(std::map<std::string, int> & mostCommon) {
 			minI = elem.second;
 		}
 	}
-	return minS;
+
+	return (mapTypeMin{ minS, minI });
 }
+
+template<typename A, typename B>
+std::pair<B, A> flip_pair(const std::pair<A, B> &p)
+{
+	return std::pair<B, A>(p.second, p.first);
+}
+
+template<typename A, typename B>
+std::multimap<B, A, std::greater<B> > flip_map(const std::map<A, B> &src)
+{
+	std::multimap<B, A, std::greater<B> > dst;
+	std::transform(src.begin(), src.end(), std::inserter(dst, dst.begin()), flip_pair<A, B>);
+	return dst;
+}
+
 
 int main(int argc, char *argv[]) {
 	std::cout << "Starting application 01-02 static ball\n";
@@ -126,27 +148,16 @@ int main(int argc, char *argv[]) {
 		input.close();
 		std::cout << "mapping done" << "\n";
 		
-		std::map<std::string, int> mostCommon;
-		for (int i = 0; i < 10; i++) {
-			mostCommon.insert({ "", 0 });
-		}
+		std::multimap<int, std::string, std::greater<int> > mostCommon = flip_map(mapping);
 
-		std::string min;
+		int i = 0;
+		std::cout << "Result!!" << "\n";
 		for (auto elem : mostCommon) {
-			min = elem.first; // fill min
-			break;
-		} 
-		for (auto elem : mapping)
-		{
-			if (elem.second > mapping.find(min)->second) {
-				min = newMin(mostCommon);
-				mostCommon.erase(min);
-				mostCommon.insert({ elem.first, elem.second });
+			std::cout<< elem.first << "	" << elem.second << "\n"; 
+			i++;
+			if (i > 10) {
+				break;
 			}
-		}
-
-		for (auto elem : mostCommon) {
-			std::cout<< elem.first << "	" << elem.second; 
 		}
 
 
