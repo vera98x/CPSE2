@@ -5,6 +5,7 @@
 #include "drawable.hpp"
 #include <vector>
 #include "makeSetCommand.hpp"
+#include "inputHandler.hpp"
 
 
 sf::Vector2f Vector2f_from_Vector2i(const sf::Vector2i & rhs) {
@@ -126,12 +127,13 @@ int main(int argc, char *argv[]) {
 	rectangle my_rectangleNine{ sf::Vector2f{ 427.0, 320.0 }, c, 9, sf::Vector2f{ 210.0, 159.0 } };
 
 	const int rectangleListSize = 9;
-	rectangle * rectangleList[rectangleListSize] = { &my_rectangleOne, &my_rectangleTwo, &my_rectangleThree, 
+	rectangle * rectangleList[9] = { &my_rectangleOne, &my_rectangleTwo, &my_rectangleThree, 
 		&my_rectangleFour, &my_rectangleFive , &my_rectangleSix, &my_rectangleSeven, &my_rectangleEight, &my_rectangleNine };
 	
 	std::vector<int> setPosition = {};
 
 	makeSetCommand command;
+	inputHandler ih(rectangleList);
 	bool done = 0;
 
 	window.clear();
@@ -150,26 +152,21 @@ int main(int argc, char *argv[]) {
 			if (event.type == sf::Event::MouseButtonPressed && !done) {
 				sf::Vector2f pos = Vector2f_from_Vector2i(sf::Mouse::getPosition(window));
 
-				for (unsigned int i = 0; i < rectangleListSize; i++) {
-					sf::Vector2f pos = Vector2f_from_Vector2i(sf::Mouse::getPosition(window));
-					if (rectangleList[i]->getGlobalBounds().contains(pos) && rectangleList[i]->isSet()) {
-						command.execute(rectangleList[i], setPlayer);
-						setPlayer = !setPlayer;
-						setPosition.push_back(rectangleList[i] ->getNumber());
-						if (checkWin(setPosition)) {
-							done = true;
-						}
-						break;
+				rectangle * matchedRectangle = ih.handleInput(pos);
+				if (matchedRectangle) {
+					command.execute(matchedRectangle, setPlayer);
+					setPlayer = !setPlayer;
+					setPosition.push_back(matchedRectangle->getNumber());
+					if (checkWin(setPosition)) {
+						done = true;
 					}
 				}
-
 			}
 
 			if (event.type==sf::Event::KeyPressed){
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z)) {
 					if (setPosition.size() > 0) {
 						int index = setPosition.back();
-						rectangleList[index - 1]->setElement(-1);
 						command.execute(rectangleList[index - 1], -1);
 						setPosition.pop_back();
 					}

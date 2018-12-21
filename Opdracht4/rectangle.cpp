@@ -45,7 +45,7 @@ sf::Vector2f rectangle::getPosition() {
 }
 
 bool rectangle::isSet() {
-	if (cross != -1) {
+	if (cross == -1) {
 		return false;
 	}
 	return true;
