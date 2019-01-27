@@ -3,28 +3,20 @@
 
 #include "command.hpp"
 #include "rectangle.hpp"
+#include <vector>
+#include <array>
 
 class inputHandler {
 private:
-	rectangle * rectangleList[9];
 
 public:
 
-	inputHandler(rectangle * rl[9]) {
-		for (int i = 0; i < 9; i++) {
-			rectangleList[i] = rl[i];
-		}
-	}
+	inputHandler();
 
-	rectangle * handleInput(sf::Vector2f pos) {
-		for (unsigned int i = 0; i < 9; i++) {
-			if (rectangleList[i]->getGlobalBounds().contains(pos) && !rectangleList[i]->isSet()) {
-				return rectangleList[i];
-			}
-			
-		}
-		return NULL;
-	}
+
+	sf::Vector2f Vector2f_from_Vector2i(const sf::Vector2i & rhs);
+
+	rectangle* handleInput(const std::array<std::shared_ptr<rectangle>, 9> & rectangleList, bool graph, sf::RenderWindow * window, bool &undo);
 
 };
 

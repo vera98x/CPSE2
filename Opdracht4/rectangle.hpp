@@ -11,20 +11,15 @@ public:
 	void move(const sf::Vector2f & delta);
 	void jump(const sf::Vector2f & delta) override;
 	void draw(sf::RenderWindow & window) const override;
-	sf::Vector2f getSize() const override {
-		return size;
-	}
-	sf::Vector2f getPosition() override;
-	sf::FloatRect getGlobalBounds() const override{
-		sf::RectangleShape rectangle;
-		rectangle.setSize(size);
-		rectangle.setPosition(position);
-		return rectangle.getGlobalBounds();
+	void drawText() const;
+	sf::Vector2f getSize() const override;
 
-	}
-	sf::Color getColor() const override {
-		return c;
-	}
+	void rectangle::reset();
+
+	sf::Vector2f getPosition() override;
+	sf::FloatRect getGlobalBounds() const override;
+
+	sf::Color getColor() const override;
 
 	bool isSet();
 
