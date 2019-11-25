@@ -51,3 +51,49 @@ for (int rounds = 0; rounds < 10; rounds++) {
     std::cout << "gem: " << timeresult / 10 << "\n";
 
 
+
+void miq_movement_c::getData(sensorBuffer &buffer, int &amountSamples) { 
+    struct timespec start; 
+    struct timespec now; 
+    clock_gettime(CLOCK_MONOTONIC, &start); 
+    int ret = NO_ERROR; 
+    // try to open buffer, make file descriptor 
+    /* Attempt to open non blocking the access dev */ 
+    int fp = open(buffer_access, O_RDONLY | O_NONBLOCK); 
+    if (fp == -1) { /* TODO: If it isn't there make the node */ 
+        ret = -errno; 
+        fprintf(stderr, "Failed to open %s\n", buffer_access); 
+        std::cout << "Failed to open buffer_access on nr" << __LINE__ << "\n"; 
+        return; 
+    } 
+ 
+    int toread; 
+    struct pollfd pfd = { 
+        .fd = fp, 
+        .events = POLLIN, 
+    }; 
+    // NOTE: -1 is blocking wait for event. ) is nonblocking 
+    ret = poll(&pfd, 1, 0); 
+    if (ret < 0) { 
+        // error has take place 
+        ret = -errno; 
+        goto error_close_buffer_access; 
+    } else if (ret == 0) { 
+        // call timed out 
+        goto error_close_buffer_access; 
+    } 
+ 
+    toread = buf_len; //4 
+ 
+    //scan_size is bytes is channelsize 
+    // read returns amount of bytes 
+    // databytes stored in data  
+    // reads the amount of bytes corresponding to toread *  
+    ssize_t read_size; 
+    read_size = read(fp, data, toread * scan_size); 
+    clock_gettime(CLOCK_MONOTONIC, &now); 
+    printf("Elapsed read bufferfile: %f\n", 
+            (now.tv_sec - start.tv_sec) + 
+            1e-9 * (now.tv_nsec - start.tv_nsec)); 
+}
+
