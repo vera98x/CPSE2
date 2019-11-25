@@ -11,4 +11,4 @@ for (int rounds = 0; rounds < 10; rounds++) {
         }
         clock_gettime(CLOCK_MONOTONIC, &end);
         std::cout << "elapsed time: " << ((end.tv_sec - start.tv_sec) + 1e-9 * (end.tv_nsec - start.tv_nsec)) << "\n";
-    }
+}
