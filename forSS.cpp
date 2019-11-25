@@ -97,3 +97,9 @@ void miq_movement_c::getData(sensorBuffer &buffer, int &amountSamples) {
             1e-9 * (now.tv_nsec - start.tv_nsec)); 
 }
 
+
+
+clock_gettime(CLOCK_MONOTONIC, &start); 
+gps.getData(); 
+clock_gettime(CLOCK_MONOTONIC, &now); 
+std::cout << "elapsed: " << (now.tv_sec-start.tv_sec + 1e-9*(now.tv_nsec - start.tv_nsec)) << "\n"; 
