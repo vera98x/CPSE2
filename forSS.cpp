@@ -173,6 +173,7 @@ int main() {
         clock_gettime(CLOCK_REALTIME, &start);
         usleep(1000000);
         clock_gettime(CLOCK_REALTIME, &now);
-        printf("Elapsed usleep %f\n", (now.tv_sec - start.tv_sec) + 1e-9 * (now.tv_nsec - start.tv_nsec));
+        printf("Elapsed usleep %f\n", (now.tv_sec - start.tv_sec) + 
+               1e-9 * (now.tv_nsec - start.tv_nsec));
     }
 }
