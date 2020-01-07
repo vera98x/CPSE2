@@ -177,3 +177,17 @@ int main() {
                1e-9 * (now.tv_nsec - start.tv_nsec));
     }
 }
+
+int main() {
+    miq_RTU rtu = miq_RTU();
+    std::cout << " Hello World!\n";
+    struct timespec start;
+    struct timespec now;
+    while (true) {
+        clock_gettime(CLOCK_REALTIME, &start);
+        rtu.rtu_usleep(1000000);
+        clock_gettime(CLOCK_REALTIME, &now);
+        printf("Elapsed usleep %f\n", (now.tv_sec - start.tv_sec) +
+               1e-9 * (now.tv_nsec - start.tv_nsec));
+    }
+}
