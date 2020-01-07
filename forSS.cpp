@@ -148,5 +148,21 @@ void SecondTimer::main() {
     }
 
 }
+
+int main() {
+    std::cout << " Hello World!\n";
+    struct timespec start;
+    struct timespec now;
+    struct timespec timeSpecInterval;
+    timeSpecInterval.tv_sec = 1;
+    timeSpecInterval.tv_nsec = 0;
+    while (true) {
+        clock_gettime(CLOCK_REALTIME, &start);
+        nanosleep(&timeSpecInterval, NULL);
+        clock_gettime(CLOCK_REALTIME, &now);
+        printf("Elapsed nanosleep %f\n", (now.tv_sec - start.tv_sec) + 1e-9 * (now.tv_nsec - start.tv_nsec));
+    }
+
+}
     
 
