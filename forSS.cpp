@@ -103,3 +103,50 @@ clock_gettime(CLOCK_MONOTONIC, &start);
 gps.getData(); 
 clock_gettime(CLOCK_MONOTONIC, &now); 
 std::cout << "elapsed: " << (now.tv_sec-start.tv_sec + 1e-9*(now.tv_nsec - start.tv_nsec)) << "\n"; 
+
+
+void SecondTimer::main() {
+    int intervalnano = 1000000000;
+    struct timespec start;
+    struct timespec now;
+    struct timespec timeSpecInterval;
+    int timeToSleep = 0;
+    clock_gettime(CLOCK_REALTIME, &start);
+    while (true) {
+        clock_gettime(CLOCK_REALTIME, &now);
+        // check how much time is left before one second passes. Sleep this resting time
+        timeToSleep = ((intervalnano - ((now.tv_sec - start.tv_sec)*1000000000 + (now.tv_nsec - start.tv_nsec))));
+        if (timeToSleep > 0 && timeToSleep < intervalnano) {
+            timeSpecInterval.tv_sec = 0;
+            timeSpecInterval.tv_nsec = (timeToSleep);
+            nanosleep(&timeSpecInterval, NULL);
+        } else {
+            std::cout << "TimerError: Error!! timing is longer than one second\n";
+        }
+        clock_gettime(CLOCK_REALTIME, &start);
+        for(auto sensor : sensors){
+            sensor->setSecondFlag();
+        }
+        collector.setSecondFlag();
+    }
+
+}
+
+void SecondTimer::main() {
+    int intervalnano = 1000000000;
+    struct timespec start;
+    struct timespec now;
+    struct timespec timeSpecInterval;
+    int timeToSleep = 0;
+    clock_gettime(CLOCK_REALTIME, &start);
+    timeSpecInterval.tv_nsec = intervalnano;
+    while (true) {
+        clock_gettime(CLOCK_REALTIME, &start);
+        nanosleep(&timeSpecInterval, NULL);
+        clock_gettime(CLOCK_REALTIME, &now);
+        printf("Elapsed %f\n", (now.tv_sec - start.tv_sec) + 1e-9 * (now.tv_nsec - start.tv_nsec));
+    }
+
+}
+    
+
